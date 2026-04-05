@@ -1,0 +1,129 @@
+{% extends "layout.html" %}
+
+{% block title %}Home | Smart Study Assistant{% endblock %}
+
+{% block content %}
+<div class="container">
+    <section class="hero">
+        <h1>Transform notes into <span>knowledge.</span></h1>
+        <p>Upload your lecture materials or paste your research notes. Our AI curator synthesizes academic content into structured study paths.</p>
+    </section>
+
+    <section class="planner-form">
+        <form id="studyForm" method="POST" enctype="multipart/form-data" onsubmit="showLoading()">
+            <div class="input-grid">
+                <!-- Text Input -->
+                <div class="input-box glass">
+                    <span class="input-label">Paste Your Notes Here</span>
+                    <textarea name="notes" placeholder="Type or paste your text content here to generate a comprehensive study guide..."></textarea>
+                </div>
+
+                <!-- File Upload -->
+                <div class="input-box glass" style="display: flex; flex-direction: column;">
+                    <span class="input-label">Drop your PDFs or Images</span>
+                    <div class="upload-zone" onclick="document.getElementById('file-input').click()">
+                        <i class="fa-solid fa-file-circle-plus"></i>
+                        <p>Upload research papers, lecture slides, or textbook photos (Max 50MB)</p>
+                        <input type="file" id="file-input" name="file" accept=".pdf,.png,.jpg,.jpeg" style="display: none;">
+                    </div>
+                    <div id="file-name" style="margin-top: 1rem; font-size: 0.8rem; color: var(--primary); text-align: center;"></div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-primary">
+                <i class="fa-solid fa-wand-magic-sparkles" style="margin-right: 0.5rem;"></i> Generate Study Guide
+            </button>
+        </form>
+    </section>
+
+    {% if summary or quiz or flashcards or plan %}
+    <section class="results-section" id="results">
+        <div class="results-header">
+            <h2>Analysis Results</h2>
+            <div style="display: flex; gap: 1rem;">
+                <button class="glass" style="padding: 0.5rem; border-radius: 8px; color: var(--text-muted); cursor: pointer;"><i class="fa-solid fa-share-nodes"></i></button>
+                <button class="glass" style="padding: 0.5rem; border-radius: 8px; color: var(--text-muted); cursor: pointer;"><i class="fa-solid fa-download"></i></button>
+            </div>
+        </div>
+
+        <div class="results-grid">
+            <!-- Executive Summary -->
+            {% if summary %}
+            <div class="card-result glass" style="grid-column: span 2;">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fa-solid fa-file-lines" style="color: var(--primary);"></i>
+                        <span>Executive Summary</span>
+                    </div>
+                    <span class="badge-ai">AI INSIGHT</span>
+                </div>
+                <div class="card-content">
+                    {{ summary }}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Quick Quiz -->
+            {% if quiz %}
+            <div class="card-result glass">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fa-solid fa-brain" style="color: var(--accent);"></i>
+                        <span>Quick Quiz</span>
+                    </div>
+                </div>
+                <div class="card-content">
+                    {{ quiz }}
+                    <!-- Mock Interactive Quiz UI if needed -->
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Flashcards -->
+            {% if flashcards %}
+            <div class="card-result glass">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fa-solid fa-layer-group" style="color: var(--secondary);"></i>
+                        <span>Flashcards</span>
+                    </div>
+                </div>
+                <div class="card-content">
+                    {{ flashcards }}
+                    <!-- Sliding interaction could be added here -->
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Proposed Study Plan -->
+            {% if plan %}
+            <div class="card-result glass" style="grid-column: span 2; background: linear-gradient(rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.9));">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fa-solid fa-calendar-check" style="color: var(--success);"></i>
+                        <span>Proposed Study Plan</span>
+                    </div>
+                </div>
+                <div class="card-content">
+                    {{ plan }}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+    {% endif %}
+</div>
+
+<script>
+    document.getElementById('file-input').onchange = function() {
+        document.getElementById('file-name').innerHTML = '<i class="fa-solid fa-check"></i> ' + this.files[0].name;
+    };
+
+    // Auto-scroll to results if they exist
+    {% if summary or quiz or flashcards or plan %}
+    window.onload = function() {
+        document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+    };
+    {% endif %}
+</script>
+{% endblock %}

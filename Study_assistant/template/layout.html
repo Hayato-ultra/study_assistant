@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Smart Study Assistant{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header id="mainHeader">
+        <a href="{{ url_for('home') }}" class="logo">Smart Study Assistant</a>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('home') }}" class="{% if request.endpoint == 'home' %}active{% endif %}">Home</a></li>
+                {% if current_user.is_authenticated %}
+                <li><a href="{{ url_for('history') }}" class="{% if request.endpoint == 'history' %}active{% endif %}">History</a></li>
+                <li><a href="{{ url_for('settings') }}" class="{% if request.endpoint == 'settings' %}active{% endif %}">Settings</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+        <div class="auth-actions">
+            {% if current_user.is_authenticated %}
+            <div class="profile-link glass">
+                <i class="fa-solid fa-user-circle"></i>
+                <span>{{ current_user.username }}</span>
+                <a href="{{ url_for('logout') }}" style="margin-left: 1rem; color: var(--error); font-size: 0.8rem;"><i class="fa-solid fa-right-from-bracket"></i></a>
+            </div>
+            {% else %}
+            <a href="{{ url_for('login') }}" class="btn-primary" style="padding: 0.6rem 1.5rem; font-size: 0.9rem; margin: 0;">Login</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <div class="flash-messages">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <h2>Synthesizing academic content...</h2>
+        <p style="color: var(--text-muted); margin-top: 10px;">This might take a moment to perfect your study path.</p>
+    </div>
+
+    <script>
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('mainHeader');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        function showLoading() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+
+        // Auto-hide flash messages after 5 seconds
+        setTimeout(() => {
+            const flashes = document.querySelectorAll('.flash');
+            flashes.forEach(f => {
+                f.style.opacity = '0';
+                f.style.transform = 'translateX(100px)';
+                f.style.transition = 'all 0.5s ease';
+                setTimeout(() => f.remove(), 500);
+            });
+        }, 5000);
+    </script>
+</body>
+</html>

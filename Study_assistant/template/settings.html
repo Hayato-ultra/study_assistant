@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block title %}Settings | Smart Study Assistant{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 800px;">
+    <div class="results-header">
+        <h2>System Settings</h2>
+        <p style="color: var(--text-muted);">Manage your account and AI preferences</p>
+    </div>
+
+    <div class="glass" style="padding: 3rem; display: flex; flex-direction: column; gap: 2rem;">
+        <div style="border-bottom: 1px solid var(--glass-border); padding-bottom: 1.5rem;">
+            <h3 style="margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.75rem;"><i class="fa-solid fa-user-gear"></i> Account Profile</h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted);">Currently logged in as <strong>{{ current_user.username }}</strong> ({{ current_user.email }})</p>
+        </div>
+
+        <div style="border-bottom: 1px solid var(--glass-border); padding-bottom: 1.5rem;">
+            <h3 style="margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.75rem;"><i class="fa-solid fa-robot"></i> AI Engine</h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.5rem;">The assistant is currently using the <strong>{{ config.AI_PROVIDER }}</strong> backend.</p>
+            <div style="display: flex; gap: 0.5rem; padding: 1rem; border-radius: 8px; background: rgba(0, 0, 0, 0.2); border: 1px solid var(--glass-border); font-size: 0.85rem;">
+                <i class="fa-solid fa-circle-info" style="color: var(--primary);"></i>
+                <span>To switch providers, update the <code>config.py</code> file on your local machine.</span>
+            </div>
+        </div>
+
+        <div>
+            <h3 style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;"><i class="fa-solid fa-shield-halved"></i> Privacy & Security</h3>
+            <button class="glass" style="width: 100%; text-align: left; padding: 1rem; color: var(--error); font-weight: 600; cursor: pointer; transition: var(--transition);">
+                <i class="fa-solid fa-trash-can" style="margin-right: 0.5rem;"></i> Clear Session History
+            </button>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.75rem;">This action will permanently delete all your previous study sessions from the database.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block title %}Sign Up | Smart Study Assistant{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-card glass">
+        <div class="auth-header">
+            <h2>Create Account</h2>
+            <p>Start transforming your notes</p>
+        </div>
+
+        <form method="POST">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Choose a unique username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="name@example.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="••••••••" required>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" id="confirm_password" name="confirm_password" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="btn-primary" style="margin-top: 1rem; width: 100%;">
+                Create Account
+            </button>
+        </form>
+
+        <div class="auth-links">
+            Already have an account? <a href="{{ url_for('login') }}">Log In</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
